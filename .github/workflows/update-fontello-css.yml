@@ -1,0 +1,53 @@
+# This workflow updates the URLs in your Fontello CSS file to point to the correct GitHub Pages URLs.
+
+name: Update Fontello CSS
+
+# This workflow is triggered whenever you push changes to the 'main' branch of your repository.
+on:
+  push:
+    branches:
+      - main  # Replace with the name of your default branch if it's not 'main'.
+
+jobs:
+  update-fontello-css:
+    # This job runs on the latest version of Ubuntu.
+    runs-on: ubuntu-latest
+
+    steps:
+    # This step checks out a copy of your repository's code.
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    # This step sets up Node.js version 14.
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    # This step installs the 'fs' module, which is used to read and write files.
+    - name: Install dependencies
+      run: npm install fs
+
+    # This step updates the URLs in your Fontello CSS file.
+    - name: Update Fontello CSS
+      run: |
+        const fs = require('fs');
+        // Replace with your actual Fontello CSS path if it's not 'css/fontello.css'.
+        const cssPath = 'css/fontello.css';  
+        const css = fs.readFileSync(cssPath, 'utf8');
+        // This line replaces the URLs in your CSS file with the correct GitHub Pages URLs.
+        const updatedCss = css.replace(/url\(['"]?(font\/[^'"]+)['"]?\)/g, `url('https://${{ github.repository }}/${{ github.ref }}/master/$1')`);
+        fs.writeFileSync(cssPath, updatedCss);
+      shell: node
+
+    # This step commits and pushes any changes made by the previous step.
+    - name: Commit and push changes
+      run: |
+        // This sets the name and email used for the commit.
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        // This commits any changes with the message "Update Fontello CSS URLs".
+        // If there are no changes to commit, it exits gracefully.
+        git commit -m "Update Fontello CSS URLs" || exit 0  
+        git push
