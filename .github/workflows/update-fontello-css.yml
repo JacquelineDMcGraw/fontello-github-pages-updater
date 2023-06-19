@@ -30,7 +30,7 @@ jobs:
 
     # This step prints the URL of the updated CSS file.
     - name: Print CSS URL
-      run: echo "The updated CSS file can be found at https://${{ github.repository }}/css/fontello.css"
+      run: echo "The updated CSS file can be found at https://${{ github.actor }}.github.io/${{ github.repository }}/css/fontello.css"
 
     # This step commits and pushes any changes made by the previous step.
     - name: Commit and push changes
