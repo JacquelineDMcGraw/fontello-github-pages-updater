@@ -32,11 +32,27 @@ jobs:
     - name: Print CSS URL
       run: echo "The updated CSS file can be found at https://${{ github.actor }}.github.io/${{ github.repository }}/css/fontello.css"
 
+    # These steps print the URLs of the font files.
+    - name: Print font URLs
+      run: |
+        echo "The updated font files can be found at:"
+        echo "https://${{ github.actor }}.github.io/${{ github.repository }}/font/fontello.eot"
+        echo "https://${{ github.actor }}.github.io/${{ github.repository }}/font/fontello.svg"
+        echo "https://${{ github.actor }}.github.io/${{ github.repository }}/font/fontello.ttf"
+        echo "https://${{ github.actor }}.github.io/${{ github.repository }}/font/fontello.woff"
+        echo "https://${{ github.actor }}.github.io/${{ github.repository }}/font/fontello.woff2"
+
     # This step commits and pushes any changes made by the previous step.
-    - name: Commit and push changes
+    - name: Commit changes
       run: |
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add .
         git commit -m "Update Fontello CSS URLs" || exit 0  
-        git push
+
+    # This step deploys your site to GitHub Pages.
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./  # The directory to deploy. Change this if your site files are in a different directory.
