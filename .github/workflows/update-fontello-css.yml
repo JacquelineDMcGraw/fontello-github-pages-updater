@@ -18,11 +18,11 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
-    # This step sets up Node.js version 14.
+    # This step sets up Node.js version 16.
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '16'
 
     # This step updates the URLs in your Fontello CSS file.
     - name: Update Fontello CSS
